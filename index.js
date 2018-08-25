@@ -17,9 +17,9 @@ const Course = mongoose.model('Course', courseSchema); // classe
 async function createCourse(params) {
     
     const course = new Course({
-        name: 'Firebase Course',
+        name: 'C# Course',
         author: 'Allan Passos',
-        tags: ['firebase', 'backend', 'RealTime Db'],
+        tags: ['C#', 'backend', 'MS'],
         isPublished: true
     }); // object
     
@@ -31,12 +31,22 @@ async function createCourse(params) {
 async function getCourses() {
   // const courses = await Course.find(); // todos os cursos
   //const courses = await Course.findById('5b7f4485b29c070974d5111c'); 
-  const courses = await Course.find({ author: 'Allan Passos', name: 'Firebase Course' });  // filtrando
+//   const courses = await Course
+//   .find({ author: 'Allan Passos', name: 'Firebase Course' });  // filtrando
+
+ // melhorando mais o filtro
+
+ const courses = await Course
+ .find({ author: 'Allan Passos'})
+ .limit(2)
+ .sort({ name: 1 })
+ .select({ name: 1, author: 1 })
+
    console.log('All courses: ', courses);
 }
 
 
-getCourses();
+ getCourses();
 // createCourse();
 
 
