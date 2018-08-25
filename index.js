@@ -9,7 +9,8 @@ const courseSchema = new mongoose.Schema({
     author: String,
     tags: [ String ],
     date: { type: Date, default: Date.now },
-    isPublished: Boolean
+    isPublished: Boolean, 
+    price: Number
 });
 
 const Course = mongoose.model('Course', courseSchema); // classe
@@ -17,10 +18,11 @@ const Course = mongoose.model('Course', courseSchema); // classe
 async function createCourse(params) {
     
     const course = new Course({
-        name: 'C# Course',
+        name: 'SQL Course',
         author: 'Allan Passos',
-        tags: ['C#', 'backend', 'MS'],
-        isPublished: true
+        tags: ['SQL', 'DB'],
+        isPublished: true,
+        price : 130
     }); // object
     
     const result = await course.save();
@@ -42,11 +44,34 @@ async function getCourses() {
  .sort({ name: 1 })
  .select({ name: 1, author: 1 })
 
+
+   console.log('All courses: ', courses);
+}
+
+async function comparationQueryOperations() {
+ // eq (equal)
+ // ne (not equal)
+ // gt (greater than)
+ // gte (greater than or equal to)
+ // lt (less than)
+ // lte (less than or equal to)
+ // in
+ // nin (not in)
+
+
+    const courses = await Course
+//.find({ price: { $gt: 100, $lt: 150 }  })
+ .find({ price: { $in: [55,  110, 130] } })
+ .sort({price: 1});
+
+
+
    console.log('All courses: ', courses);
 }
 
 
- getCourses();
-// createCourse();
+ // getCourses();
+ //   createCourse();
+  comparationQueryOperations();
 
 
