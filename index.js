@@ -64,14 +64,43 @@ async function comparationQueryOperations() {
  .find({ price: { $in: [55,  110, 130] } })
  .sort({price: 1});
 
-
-
    console.log('All courses: ', courses);
 }
 
+async function logicalOperation() {
+    // or
+    // and
+
+    const courses = await Course
+    .find()
+   // .or([{ price: 10 }, { price: 55}]);
+    .or([{ price: 55 }, { author: 'Allan Passos'}]);
+
+    console.log('All courses: ', courses)
+}
+
+
+async function regularExpressionOperation() {
+    // or
+    // and
+
+    const courses = await Course
+   // .find({ author: /^All/ }) //Começa com
+   // .find({ name: /^Fire/ })
+   // .find({ author: /Passos$/i })  // i pra nao ficar case sensitive e $ pra pegar o q termina
+    .find({ author: /.*Allan.*/ })  // contain
+    .count() // soh mostro o totall dos itens retornados
+   
+
+
+    console.log('All courses: ', courses)
+}
 
  // getCourses();
- //   createCourse();
-  comparationQueryOperations();
+ // createCourse();
+ // logicalOperation();
+// comparationQueryOperations();
+
+regularExpressionOperation();
 
 
