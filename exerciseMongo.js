@@ -16,6 +16,12 @@ const courseSchema = new mongoose.Schema({
 
   const Course = mongoose.model('Course', courseSchema); // classe
 
+  
+async function allCourses() {
+
+  return await Course.find();
+}
+
   async function getCourses() {
     console.log('entrou');
     return await Course
@@ -42,15 +48,46 @@ const courseSchema = new mongoose.Schema({
     .sort('-price')
     .select('name author price');
   }
-  
 
+  async function getAllanCourse() {
+    return await Course
+    .find({ author:  /.*Allan.*/})
+    .select('name author price');
+  }
+  
+ 
+  async function updateCourse(id) {
+    console.log('ID: ', id)
+    // Aproach: Query first
+    // findById()
+    // Modify its properties
+    // save()
+
+    // Aproach: Update First
+    // Update directly 
+    // Optionally: get the updated document
+
+   const course = await Course.findById(id);
+  console.log('Achou: ', course);
+   if (!course) return;
+
+   course.set({  
+   isPublished: true,
+   author: 'Allan SuRu'
+   });
+
+   const result = await course.save();
+   console.log('Update:', result);
+  }
   
   
   
   async function run() {
-    const courses = await getCourses3();
+    const courses = await allCourses();
     console.log(courses);
   }
+
+    updateCourse('5a68ff090c553064a218a547');
   
-  run();
+ // run();
   
