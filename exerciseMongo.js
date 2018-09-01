@@ -23,9 +23,32 @@ const courseSchema = new mongoose.Schema({
     .sort({ name: 1 })
     .select({ name: 1, author: 1 });
   }
+
+  async function getCoursesExercico2() {
+    return await Course
+    .find({ isPublished: true })
+    .or([  
+      { price: { $gte: 15 } },
+      { name: /.*by.*/i }
+    ])
+    .sort('-price')
+    .select('name author price isPublished');
+  }
+
+  async function getCourses3() {
+    return await Course
+    .find({ isPublished: true })
+    .or([ { tags: 'frontend' }, { tags: 'backend' } ])
+    .sort('-price')
+    .select('name author price');
+  }
+  
+
+  
+  
   
   async function run() {
-    const courses = await getCourses();
+    const courses = await getCourses3();
     console.log(courses);
   }
   
