@@ -79,15 +79,34 @@ async function allCourses() {
    const result = await course.save();
    console.log('Update:', result);
   }
+
+  async function updateCourse2(id) {
+   const result = await Course.findByIdAndUpdate({ _id: id}, {
+     $set: {
+       author: 'Allan SuRu 2',
+       isPublished: false
+     }
+   }, { new: true });
+
+   console.log('Update:', result);
+  }
   
+
+  
+  async function removeCourse(id) {
+  //  const result = await Course.deleteOne({ _id: id });
+  const course = await Course.findByIdAndRemove(id);
+    console.log(course);
+   }
+   
   
   
   async function run() {
     const courses = await allCourses();
     console.log(courses);
   }
-
-    updateCourse('5a68ff090c553064a218a547');
+  removeCourse('5b8c6909bc09dc3244f64792');
+ //  updateCourse2('5b8c66fcbc09dc3244f64790');
   
  // run();
   
