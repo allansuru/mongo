@@ -6,12 +6,28 @@ mongoose.connect('mongodb://localhost:27017/mongo-exercises')
 
 
 const courseSchema = new mongoose.Schema({
-    name: String,
+    name: { 
+      type: String, 
+      required: true, 
+      minlength: 3,
+      maxlength: 50,
+      // match: /pattern/
+    },
+    category: {
+      type: String,
+      required: true,
+      enum: ['web', 'mobile', 'network']
+    },
     author: String, 
     tags: [ String ],
-    date: Date, 
+    date: { type: Date, default: Date.now}, 
     isPublished: Boolean,
-    price: Number
+    price: {
+      type: Number,
+      min: 1,
+      max: 100,
+      required: function() { return this.isPublished; }
+    }
   });
 
   const Course = mongoose.model('Course', courseSchema); // classe
@@ -20,6 +36,30 @@ const courseSchema = new mongoose.Schema({
 async function allCourses() {
 
   return await Course.find();
+}
+
+async function createCourse() {
+  const course = new Course({
+    name: 'Curso pica',
+    author:'Suru',
+    category: 'web',
+    tags: ['js', 'ts'],
+    isPublished: true,
+    price: 99.99
+  });
+
+  try {
+   
+      const result = await course.save();
+      console.log(result);
+    
+
+  }
+  catch(err) {
+    console.log('Erro: ', err.message);
+  }
+
+ 
 }
 
   async function getCourses() {
@@ -105,7 +145,9 @@ async function allCourses() {
     const courses = await allCourses();
     console.log(courses);
   }
-  removeCourse('5b8c6909bc09dc3244f64792');
+
+  createCourse();
+ // removeCourse('5b8c6909bc09dc3244f64792');
  //  updateCourse2('5b8c66fcbc09dc3244f64790');
   
  // run();
