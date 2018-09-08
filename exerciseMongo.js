@@ -16,10 +16,18 @@ const courseSchema = new mongoose.Schema({
     category: {
       type: String,
       required: true,
-      enum: ['web', 'mobile', 'network']
+      enum: ['web', 'mobile', 'network'],
     },
     author: String, 
-    tags: [ String ],
+    tags: {
+      type: Array,
+      validate: {
+        validator: function(v) {
+          return v && v.length > 0
+        },
+        message: 'um curso deve ter ao menos uma tag.'
+      }
+    },
     date: { type: Date, default: Date.now}, 
     isPublished: Boolean,
     price: {
@@ -40,10 +48,10 @@ async function allCourses() {
 
 async function createCourse() {
   const course = new Course({
-    name: 'Curso pica',
+    // name: 'Curso mongo',
     author:'Suru',
-    category: 'web',
-    tags: ['js', 'ts'],
+    category: '-',
+    tags: [],
     isPublished: true,
     price: 99.99
   });
@@ -52,11 +60,12 @@ async function createCourse() {
    
       const result = await course.save();
       console.log(result);
-    
-
+  
   }
   catch(err) {
-    console.log('Erro: ', err.message);
+    for (field in err.errors) {
+      console.log(err.errors[field].message);
+    }
   }
 
  
