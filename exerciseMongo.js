@@ -17,6 +17,8 @@ const courseSchema = new mongoose.Schema({
       type: String,
       required: true,
       enum: ['web', 'mobile', 'network'],
+      lowercase: true,
+      trim: true
     },
     author: String, 
     tags: {
@@ -32,9 +34,11 @@ const courseSchema = new mongoose.Schema({
     isPublished: Boolean,
     price: {
       type: Number,
-      min: 1,
-      max: 100,
-      required: function() { return this.isPublished; }
+      min: 0.1,
+      max: 1100,
+      required: function() { return this.isPublished; },
+      get: v => Math.random(v),
+      set: v => Math.random(v),
     }
   });
 
@@ -48,12 +52,12 @@ async function allCourses() {
 
 async function createCourse() {
   const course = new Course({
-    // name: 'Curso mongo',
+    name: 'Curso set/get',
     author:'Suru',
-    category: '-',
-    tags: [],
+    category: 'WEB',
+    tags: ['c#'],
     isPublished: true,
-    price: 99.99
+    price: 99.95
   });
 
   try {
@@ -99,9 +103,11 @@ async function createCourse() {
   }
 
   async function getAllanCourse() {
-    return await Course
-    .find({ author:  /.*Allan.*/})
+    const result =  await Course
+    .find({ author:  /.*Suru.*/})
     .select('name author price');
+
+    console.log(result)
   }
   
  
@@ -155,7 +161,9 @@ async function createCourse() {
     console.log(courses);
   }
 
-  createCourse();
+  getAllanCourse();
+
+  // createCourse();
  // removeCourse('5b8c6909bc09dc3244f64792');
  //  updateCourse2('5b8c66fcbc09dc3244f64790');
   
